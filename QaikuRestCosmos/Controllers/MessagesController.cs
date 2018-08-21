@@ -39,7 +39,7 @@ namespace QaikuRestCosmos.Controllers
         // GET api/messages/getall
         [HttpGet]
         public ActionResult<List<Message>> GetAllMessages()
-        {
+      {
             FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
             IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
                 .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C");
@@ -53,20 +53,22 @@ namespace QaikuRestCosmos.Controllers
         {
             FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
             IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
-                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C WHERE C.SenderId = {id}");
+                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM c  WHERE CONTAINS(c.SenderId, '{id}')");
+    
 
             return Ok(query.ToList());
         }
-        //// GET api/messages/getbyrecipientid
-        //[HttpGet]
-        //public ActionResult<List<Message>> GetByRecipientId(int id)
-        //{
-        //    FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
-        //    IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
-        //        .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C WHERE C.RecipientsIdCsv == {id}");
+        // GET api/messages/getbyrecipientid
+        [HttpGet]
+        public ActionResult<List<Message>> GetByRecipientId(string id)
+        {
+            FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
+            IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
+                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM c  WHERE CONTAINS(c.RecipientsIdCsv, '{id}')");
 
-        //    return Ok(query.ToList());
-        //}
+            return Ok(query.ToList());
+        }
+      
 
         //GET api/messages/getbydocumentid
         [HttpGet]
