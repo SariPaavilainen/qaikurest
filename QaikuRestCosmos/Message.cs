@@ -12,7 +12,7 @@ namespace QaikuRestCosmos
         /// </summary>
         public string Subject { get; set; }
         public string Description { get; set; }
-        public int SenderId { get; set; }
+        public string SenderId { get; set; }
         public string RecipientsIdCsv { get; set; }
         public DateTime SendDate { get; set; }
         public int Category { get; set; }

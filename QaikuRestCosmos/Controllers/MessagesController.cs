@@ -29,6 +29,12 @@ namespace QaikuRestCosmos.Controllers
 
         }
 
+        //GET api/messages/ping
+        [HttpGet]
+        public string Ping()
+        {
+            return "yhteys luotu";
+        }
 
         // GET api/messages/getall
         [HttpGet]
@@ -43,24 +49,24 @@ namespace QaikuRestCosmos.Controllers
 
         // GET api/messages/getbysenderid
         [HttpGet]
-        public ActionResult<List<Message>> GetBySenderId(int id)
+        public ActionResult<List<Message>> GetBySenderId(string id)
         {
             FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
             IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
-                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C WHERE C.SenderId == {id}");
+                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C WHERE C.SenderId = {id}");
 
             return Ok(query.ToList());
         }
-        // GET api/messages/getbyrecipientid
-        [HttpGet]
-        public ActionResult<List<Message>> GetByRecipientId(int id)
-        {
-            FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
-            IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
-                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C WHERE C.RecipientsIdCsv == {id}");
+        //// GET api/messages/getbyrecipientid
+        //[HttpGet]
+        //public ActionResult<List<Message>> GetByRecipientId(int id)
+        //{
+        //    FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
+        //    IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
+        //        .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C WHERE C.RecipientsIdCsv == {id}");
 
-            return Ok(query.ToList());
-        }
+        //    return Ok(query.ToList());
+        //}
 
         //GET api/messages/getbydocumentid
         [HttpGet]
