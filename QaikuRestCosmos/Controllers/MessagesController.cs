@@ -51,6 +51,17 @@ namespace QaikuRestCosmos.Controllers
 
             return Ok(query.ToList());
         }
+        // GET api/messages/getbyrecipientid
+        [HttpGet]
+        public ActionResult<List<Message>> GetByRecipientId(int id)
+        {
+            FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
+            IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
+                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM C WHERE C.RecipientsIdCsv == {id}");
+
+            return Ok(query.ToList());
+        }
+
         //GET api/messages/getbydocumentid
         [HttpGet]
         public async Task<ActionResult<Message>> GetByDocumentId(string documentid)
