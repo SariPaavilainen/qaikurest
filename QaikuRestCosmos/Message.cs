@@ -39,6 +39,15 @@ namespace QaikuRestCosmos
         /// Whether or not the question is favorited
         /// </summary>
         public bool Favorite { get; set; }
+        /// <summary>
+        ///  For answers, use Response(0); For questions, choose Unanswered(1), Partial(2), or Answered(3).
+        /// </summary>
+        public int State { get; set; }
+        /// <summary>
+        /// The id indicating which thread the message belongs to
+        /// </summary>
+        public string ThreadId { get; set; }
     }
     enum Category { Question = 1, Answer };
+    enum State { Response, Unanswered, Partial, Answered }
 }

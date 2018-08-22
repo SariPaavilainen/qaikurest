@@ -68,7 +68,19 @@ namespace QaikuRestCosmos.Controllers
 
             return Ok(query.ToList());
         }
-      
+
+        // GET api/messages/getbythreadid
+        [HttpGet]
+        public ActionResult<List<Message>> GetByThreadId(string threadId)
+        {
+            FeedOptions queryoptions = new FeedOptions { MaxItemCount = -1 };
+            IQueryable<Message> query = _client.CreateDocumentQuery<Message>(UriFactory
+                .CreateDocumentCollectionUri(_dbName, _collectionName), $"SELECT * FROM c  WHERE CONTAINS(c.ThreadId, '{threadId}')");
+
+            return Ok(query.ToList());
+        }
+
+
 
         //GET api/messages/getbydocumentid
         [HttpGet]
@@ -102,10 +114,38 @@ namespace QaikuRestCosmos.Controllers
             return Ok(document.Id);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+      
+
+        //PUT api/messages/5
+      
+        [HttpPut]
+        public async Task<ActionResult<string>> PutState(string documentid, [FromBody]Message value)
         {
+
+            try
+            {
+                Message msg = _client.CreateDocumentQuery<Message>(UriFactory.CreateDocumentCollectionUri(_dbName, _collectionName))
+                            .Where(r => r.id == documentid)
+                            .AsEnumerable()
+                            .SingleOrDefault();
+
+                msg.State = value.State; 
+                Document document = await _client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(_dbName, _collectionName, documentid), msg);
+
+                return Ok(document);
+            }
+            catch (DocumentClientException de)
+            {
+
+                switch (de.StatusCode.Value)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return NotFound();
+                }
+
+            }
+            return BadRequest();
+
         }
 
         // DELETE api/values/5
