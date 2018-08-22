@@ -36,7 +36,7 @@ namespace QaikuRestCosmos.Controllers
             return "yhteys luotu";
         }
 
-        // GET api/messages/getall
+        // GET api/messages/getallmessages
         [HttpGet]
         public ActionResult<List<Message>> GetAllMessages()
       {
